@@ -20,7 +20,7 @@ public class StudentDao {
 	private final String selectByIdQuery = "SELECT * FROM details WHERE id=?";
 	private final String checkUser = "select * from details";
 
-	public int save(Student student) throws SQLException {
+	public int add(Student student) throws SQLException {
 
 		// Insert
 		PreparedStatement ps = con.prepareStatement(insertQuery);
@@ -97,7 +97,7 @@ public class StudentDao {
 		for (String id : studentids) {
 			PreparedStatement ps = con.prepareStatement(deleteQuery);
 			ps.setInt(1, Integer.parseInt(id));
-			// result += ps.executeUpdate();
+			result += ps.executeUpdate();
 		}
 		return result;
 	}
@@ -107,6 +107,17 @@ public class StudentDao {
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
 			if (rs.getString(6).equals(username)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean contactExist(String contact) throws SQLException {
+		PreparedStatement ps = con.prepareStatement(checkUser);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			if (rs.getString(9).equals(contact)) {
 				return true;
 			}
 		}
