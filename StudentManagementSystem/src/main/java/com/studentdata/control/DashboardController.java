@@ -23,7 +23,7 @@ public class DashboardController extends HttpServlet {
 		StudentService studentService = new StudentService();
 		students = studentService.getAll();
 		request.setAttribute("student", students);
-		
+
 		// forward request to the view
 		RequestDispatcher dispathcer = request.getRequestDispatcher("dashboard.jsp");
 		dispathcer.forward(request, response);

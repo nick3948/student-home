@@ -3,6 +3,8 @@ package com.studentdata.control;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -68,7 +70,7 @@ public class StudentController extends HttpServlet {
 				student.setUsername(username);
 			}
 		}
-		if (service.contactExist(contact)) {
+		if (service.contactExist(contact, id)) {
 			request.getSession().setAttribute("contactexist", "fail");
 		} else {
 			student.setContact(contact);
@@ -77,20 +79,23 @@ public class StudentController extends HttpServlet {
 		Validator validator = factory.getValidator();
 		Set<ConstraintViolation<Student>> constraintViolations = validator.validate(student);
 		if (!constraintViolations.isEmpty()) {
-			String errors = "<ul>";
+			String error;
+			List<String> errors = new ArrayList<String>();
 			for (ConstraintViolation<Student> constraintViolation : constraintViolations) {
 				if (action != null && action.equals("edit")) {
-					if (constraintViolation.getPropertyPath().equals("username")) {
+					String propertyPath = constraintViolation.getPropertyPath().toString();
+					if (propertyPath.equals("username")) {
 						;
-					} else
-						errors += "<li>" + constraintViolation.getPropertyPath() + " "
-								+ constraintViolation.getMessage() + "</li>";
+					} else {
+						error = propertyPath + " " + constraintViolation.getMessage();
+						errors.add(error);
+					}
 				} else if (action != null && action.equals("add")) {
-					errors += "<li>" + constraintViolation.getPropertyPath() + " " + constraintViolation.getMessage()
-							+ "</li>";
+					String propertyPath = constraintViolation.getPropertyPath().toString();
+					error = propertyPath + " " + constraintViolation.getMessage();
+					errors.add(error);
 				}
 			}
-			errors += "</ul>";
 			request.setAttribute("student", student);
 			request.setAttribute("errors", errors);
 			if (id == 0)
@@ -148,9 +153,13 @@ public class StudentController extends HttpServlet {
 				if (studentDeleteIds != null) {
 					int result = service.delete(studentDeleteIds);
 					if (result > 0) {
-						request.getSession().setAttribute("delete", "success");
+						request.setAttribute("delete", "success");
+						dispatcher = request.getRequestDispatcher("dashboard");
+						dispatcher.forward(request, response);
 					} else {
-						request.getSession().setAttribute("delete", "fail");
+						request.setAttribute("delete", "fail");
+						dispatcher = request.getRequestDispatcher("dashboard");
+						dispatcher.forward(request, response);
 					}
 				}
 				response.sendRedirect(dashboardUrl);

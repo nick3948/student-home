@@ -113,11 +113,11 @@ public class StudentDao {
 		return false;
 	}
 
-	public boolean contactExist(String contact) throws SQLException {
+	public boolean contactExist(String contact, int id) throws SQLException {
 		PreparedStatement ps = con.prepareStatement(checkUser);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			if (rs.getString(9).equals(contact)) {
+			if (rs.getString(9).equals(contact) && rs.getInt(1) != id) {
 				return true;
 			}
 		}

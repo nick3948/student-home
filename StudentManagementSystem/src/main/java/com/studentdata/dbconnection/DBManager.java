@@ -12,7 +12,7 @@ public class DBManager {
 		try {
 			// Open and get configuration file
 			FileReader dbConfigPropertiesFile = new FileReader(
-					"C:\\Users\\nikhi\\eclipse-workspace\\StudentManagementSystem\\src\\main\\java\\com\\studentdata\\resource\\config.properties");
+					"C:\\Users\\nikhi\\git\\stu\\StudentManagementSystem\\src\\main\\java\\com\\studentdata\\resource\\config.properties");
 			Properties dbConfigProperties = new Properties();
 			dbConfigProperties.load(dbConfigPropertiesFile);
 

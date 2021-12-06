@@ -64,10 +64,10 @@ public class StudentService {
 		return false;
 	}
 
-	public boolean contactExist(String contact) {
+	public boolean contactExist(String contact, int id) {
 
 		try {
-			return studentDao.contactExist(contact);
+			return studentDao.contactExist(contact, id);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
